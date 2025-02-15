@@ -8,25 +8,15 @@
 <body>
 <div style="margin-right:10%;margin-left:10%;">
      <h1>Task Manager</h1>
+     <div class="d-flex justify-content-end mt-2 mb-2">
+        <button id="openCreateForm" class="btn btn-secondary">+ Create Task</button>&nbsp;&nbsp;
+        <button id="openUpdateForm" class="btn btn-secondary">Update Task</button>
+     </div>
     
-    <form action="/add" method="POST">
-        <input type="text" name="title" placeholder="Task Title" required>
-        <input type="text" name="description" placeholder="Description">
-        <select name="category">
-            <option value="Work">Work</option>
-            <option value="School">School</option>
-            <option value="Personal">Personal</option>
-        </select>
-        <input type="date" name="due_date" required>
-        <select name="status">
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
-            <option value="Overdue">Overdue</option>
-        </select>
-        <button type="submit">Add Task</button>
-    </form>
+    
+    
 
-    <h2>Task List</h2>
+
     <div>
         <table class="table table-striped table-hover">
         <tr>
@@ -49,18 +39,9 @@
         </table>
     </div>
   
-    <ul>
-
-       
-        
-        <li>
-            <strong>{{title}}</strong> - {{status}}
-            <form action="/delete/{{id}}" method="POST" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-    </ul>
+   
 </div>
    
 </body>
+
 </html>
