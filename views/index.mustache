@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Task Manager</title>
+    <style
+</head>
+<body>
+    <h1>Task Manager</h1>
+    
+    <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Task Title" required>
+        <input type="text" name="description" placeholder="Description">
+        <select name="category">
+            <option value="Work">Work</option>
+            <option value="School">School</option>
+            <option value="Personal">Personal</option>
+        </select>
+        <input type="date" name="due_date" required>
+        <select name="status">
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+            <option value="Overdue">Overdue</option>
+        </select>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Task List</h2>
+    <ul>
+        {{#tasks}}
+        
+        <li>
+            <strong>{{title}}</strong> - {{status}}
+            <form action="/delete/{{id}}" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        {{/tasks}}
+    </ul>
+</body>
+</html>
