@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <title>Task Manager</title>
-    <style
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
 </head>
 <body>
-    <h1>Task Manager</h1>
+<div style="margin-right:10%;margin-left:10%;">
+     <h1>Task Manager</h1>
     
     <form action="/add" method="POST">
         <input type="text" name="title" placeholder="Task Title" required>
@@ -25,8 +27,31 @@
     </form>
 
     <h2>Task List</h2>
-    <ul>
+    <div>
+        <table class="table table-striped table-hover">
+        <tr>
+            <th>Task Name</th>
+            <th>Category</th>
+            <th>Due date</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
         {{#tasks}}
+        <tr>
+            <td>{{title}}</td>
+            <td>{{category}}</td>
+            <td>{{due_date}}</td>
+            <td>{{description}}</td>
+            <td>{{status}}</td>
+        </tr>
+        {{/tasks}}
+
+        </table>
+    </div>
+  
+    <ul>
+
+       
         
         <li>
             <strong>{{title}}</strong> - {{status}}
@@ -34,7 +59,8 @@
                 <button type="submit">Delete</button>
             </form>
         </li>
-        {{/tasks}}
     </ul>
+</div>
+   
 </body>
 </html>
