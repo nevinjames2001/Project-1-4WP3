@@ -21,3 +21,13 @@ router.post("/add", (req, res) => {
         }
     );
 });
+
+// POST: Delete a task
+router.post("/delete/:id", (req, res) => {
+    db.run("DELETE FROM tasks WHERE id = ?", [req.params.id], (err) => {
+        if (err) return res.status(500).send("Error deleting task");
+        res.redirect("/");
+    });
+});
+
+module.exports = router;
