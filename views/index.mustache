@@ -10,17 +10,41 @@
     
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/index.css">
 
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Task Manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link " href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div style="margin-right:10%;margin-left:10%;">
      <h1>Task Manager</h1>
-     <div class="d-flex justify-content-end mt-2 mb-2">
-        <button id="openCreateForm" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#taskModal">+ Create Task </button>&nbsp;&nbsp;
+    <div class="d-flex flex-wrap gap-2 justify-content-end">
+        <button id="openCreateForm" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#taskModal">+ Create Task </button>
         <button id="openUpdateForm" class="btn btn-secondary">Update Task</button>
         <button id="deleteAllTasksBtn" class="btn btn-danger ms-2">Delete All Tasks</button>
      </div>
-     <div class="d-flex justify-content-end mt-2 mb-3">
+     <div class="d-flex flex-wrap justify-content-end mt-2 mb-3 gap-2">
         <div>
             <label for="categoryFilter" class="form-label">Filter by Category:</label>
             <select id="categoryFilter" class="form-select">
@@ -29,7 +53,7 @@
                 <option value="school">School</option>
                 <option value="Personal">Personal</option>
             </select>
-        </div>&nbsp;&nbsp;
+        </div>
         <div>
             <label for="statusFilter" class="form-label">Filter by Status:</label>
             <select id="statusFilter" class="form-select">
