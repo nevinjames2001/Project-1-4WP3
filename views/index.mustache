@@ -62,7 +62,7 @@
             data-category="{{category}}" 
             data-due_date="{{due_date}}" 
             data-description="{{description}}" 
-            data-status="{{status}}">
+            data-status="{{status}}" class="{{#isOverdue}}table-danger{{/isOverdue}}">
             <td>
                 <span class="task-text">{{title}}</span>
                 <input type="text" class="form-control task-title task-input" value="{{title}}" style="display: none;" required>
