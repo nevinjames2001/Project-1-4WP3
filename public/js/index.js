@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const toggleEditBtn = document.getElementById("openUpdateForm");
     let isEditing = false;
     let originalData = new Map(); // Store original task data
+    const deleteAllTasksBtn = document.getElementById("deleteAllTasksBtn");
 
 
     if (openCreateForm) {
@@ -181,4 +182,23 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    if (deleteAllTasksBtn) {
+        deleteAllTasksBtn.addEventListener("click", function () {
+            if (confirm("Are you sure you want to delete ALL tasks? This action cannot be undone!")) {
+                fetch("http://localhost:3000/tasks/deleteAll", {
+                    method: "DELETE"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("All tasks deleted successfully!");
+                    window.location.reload(); // Refresh page to show empty table
+                })
+                .catch(error => {
+                    console.error("Error deleting all tasks:", error);
+                    alert("Failed to delete tasks.");
+                });
+            }
+        });
+    }
 });
