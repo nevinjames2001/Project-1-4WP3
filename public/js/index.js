@@ -1,86 +1,86 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const openCreateForm = document.getElementById("openCreateForm");
-    const closeCreateForm = document.querySelector(".btn-close");
-    const addTaskBtn = document.getElementById("addTaskBtn");
     const toggleEditBtn = document.getElementById("openUpdateForm");
     let isEditing = false;
     let originalData = new Map(); // Store original task data
-    const deleteAllTasksBtn = document.getElementById("deleteAllTasksBtn");
+     const categoryFilter = document.getElementById("categoryFilter");
+    const statusFilter = document.getElementById("statusFilter");
 
 
-    if (openCreateForm) {
-        openCreateForm.addEventListener("click", function () {
-            document.getElementById("taskModal").style.display = "block";
-        });
-    }
+    let table = $("#taskTable").DataTable({
+        responsive: true,
+        autoWidth: false,
+        lengthChange: false,
+        pageLength: 5, // Default rows per page
+        ordering: true,
+        columnDefs: [{ targets: [5], orderable: false }], // Disable sorting on actions column
+        language: {
+            searchPlaceholder: "Search tasks...",
+        }
+    });
 
-    if (closeCreateForm) {
-        closeCreateForm.addEventListener("click", function () {
-            document.getElementById("taskModal").style.display = "none";
-        });
-    }
+    // Open Create Form Modal
+    document.getElementById("openCreateForm").addEventListener("click", function () {
+        document.getElementById("taskModal").style.display = "block";
+    });
 
-    if (addTaskBtn) {
-        addTaskBtn.addEventListener("click", function () {
-            const taskName = document.getElementById("taskName").value;
-            const category = document.getElementById("category").value;
-            const status = document.getElementById("status").value;
-            const dueDate = document.getElementById("dueDate").value;
-            const description = document.getElementById("description").value;
+    // Add Task
+    document.getElementById("addTaskBtn").addEventListener("click", function () {
+        const taskName = document.getElementById("taskName").value;
+        const category = document.getElementById("category").value;
+        const status = document.getElementById("status").value;
+        const dueDate = document.getElementById("dueDate").value;
+        const description = document.getElementById("description").value;
 
-            if (taskName.trim() === "" || category.trim() === "" || status.trim() === "" || dueDate.trim() === "" || description.trim() === ""){
-                alert("All the details are required!");
-                return;
-            }
+        if (!taskName || !category || !status || !dueDate || !description) {
+            alert("All fields are required!");
+            return;
+        }
 
-            console.log("Task Added:", { taskName, category, status, dueDate, description });
-             const taskData = {
-                title: taskName,
-                description: description,
-                category: category,
-                due_date: dueDate,
-                status: status
-            };
-            console.log(taskData);
+        // Send data to backend
+        fetch("/tasks/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: taskName, category, status, due_date: dueDate, description })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Task Added Successfully!");
+            location.reload(); // Refresh DataTable
+        })
+        .catch(error => console.error("Error:", error));
+    });
 
-            // Send data to backend using fetch
-           fetch("http://localhost:3000/tasks/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                     title: taskName,
-                    description: description,
-                    category: category,
-                    due_date: dueDate,
-                    status: status
-                })
-            })
+    // Delete a Task
+    $("#taskTable tbody").on("click", ".delete-task-btn", function () {
+        let row = $(this).closest("tr");
+        let taskId = row.attr("data-task-id");
+
+        if (confirm("Are you sure you want to delete this task?")) {
+            fetch(`/tasks/delete/${taskId}`, { method: "DELETE" })
             .then(response => response.json())
-            .then(data => console.log("Task Added:", data))
-            .catch(error => console.error("Error:", error));
+            .then(() => {
+                table.row(row).remove().draw(); // Remove from DataTable
+                alert("Task Deleted!");
+            })
+            .catch(error => console.error("Error deleting task:", error));
+        }
+    });
+
+    // Delete All Tasks
+    document.getElementById("deleteAllTasksBtn").addEventListener("click", function () {
+        if (confirm("Are you sure you want to delete ALL tasks?")) {
+            fetch("/tasks/deleteAll", { method: "DELETE" })
+            .then(response => response.json())
+            .then(() => {
+                table.clear().draw(); // Clear DataTable
+                alert("All tasks deleted!");
+            })
+            .catch(error => console.error("Error deleting all tasks:", error));
+        }
+    });
 
 
-            // Hide modal
-            const modalElement = document.getElementById("taskModal");
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            modalInstance.hide();
-
-            document.getElementById("taskName").value=null;
-            document.getElementById("category").value=null;
-            document.getElementById("status").value=null;
-            document.getElementById("dueDate").value=null;
-            document.getElementById("description").value=null;
-
-
-        });
-    }
-
-
-
-
-    toggleEditBtn.addEventListener("click", function () {
+     toggleEditBtn.addEventListener("click", function () {
         const taskRows = document.querySelectorAll("tr[data-task-id]");
 
         if (!isEditing) {
@@ -166,44 +166,29 @@ document.addEventListener("DOMContentLoaded", function () {
         isEditing = !isEditing;
     });
 
+      function filterTasks() {
+        const selectedCategory = categoryFilter.value.toLowerCase();
+        const selectedStatus = statusFilter.value.toLowerCase();
 
-    document.querySelectorAll(".delete-task-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            const row = this.closest("tr");
-            const taskId = row.getAttribute("data-task-id");
+        document.querySelectorAll("tbody tr[data-task-id]").forEach(row => {
+            const taskCategory = row.getAttribute("data-category").toLowerCase();
+            const taskStatus = row.getAttribute("data-status").toLowerCase();
 
-            if (confirm("Are you sure you want to delete this task?")) {
-                fetch(`http://localhost:3000/tasks/delete/${taskId}`, {
-                    method: "DELETE"
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert("Task deleted successfully!");
-                    window.location.reload();
-                })
-                .catch(error => {
-                    alert("Failed to delete task.");
-                });
-            }
-        });
-    });
+            // Check if the row matches the selected filters
+            const matchesCategory = selectedCategory === "all" || taskCategory === selectedCategory;
+            const matchesStatus = selectedStatus === "all" || taskStatus === selectedStatus;
 
-    if (deleteAllTasksBtn) {
-        deleteAllTasksBtn.addEventListener("click", function () {
-            if (confirm("Are you sure you want to delete ALL tasks? This action cannot be undone!")) {
-                fetch("http://localhost:3000/tasks/deleteAll", {
-                    method: "DELETE"
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert("All tasks deleted successfully!");
-                    window.location.reload(); // Refresh page to show empty table
-                })
-                .catch(error => {
-                    console.error("Error deleting all tasks:", error);
-                    alert("Failed to delete tasks.");
-                });
+            if (matchesCategory && matchesStatus) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
             }
         });
     }
+
+    // Attach event listeners to the filter dropdowns
+    categoryFilter.addEventListener("change", filterTasks);
+    statusFilter.addEventListener("change", filterTasks);
+
+
 });
