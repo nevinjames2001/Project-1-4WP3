@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const dueDate = document.getElementById("dueDate").value;
             const description = document.getElementById("description").value;
 
-            if (taskName.trim() === "" || category.trim() === "") {
-                alert("Task Name and Category are required!");
+            if (taskName.trim() === "" || category.trim() === "" || status.trim() === "" || dueDate.trim() === "" || description.trim() === ""){
+                alert("All the details are required!");
                 return;
             }
 
@@ -114,6 +114,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     description: row.querySelector(".task-description").value,
                     status: row.querySelector(".task-status").value
                 };
+
+                  if (newData.title.trim() === "" || newData.category.trim() === "" || newData.due_date.trim() === "" || newData.status.trim() === "" || newData.description.trim() === ""){
+                    alert("All the details are required!");
+                    return;
+                }
 
                 // Compare new data with original data, only update if changed
                 const original = originalData.get(taskId);
