@@ -24,12 +24,37 @@
             <th>Status</th>
         </tr>
         {{#tasks}}
-        <tr>
-            <td>{{title}}</td>
-            <td>{{category}}</td>
-            <td>{{due_date}}</td>
-            <td>{{description}}</td>
-            <td>{{status}}</td>
+        
+
+          <tr data-task-id="{{id}}">
+            <td>
+                <span class="task-text">{{title}}</span>
+                <input type="text" class="form-control task-title task-input" value="{{title}}" style="display: none;">
+            </td>
+            <td>
+                <span class="task-text">{{category}}</span>
+                <select class="form-select task-category task-input" style="display: none;">
+                    <option value="Work" {{#ifWork}}selected{{/ifWork}}>Work</option>
+                    <option value="School" {{#ifSchool}}selected{{/ifSchool}}>School</option>
+                    <option value="Personal" {{#ifPersonal}}selected{{/ifPersonal}}>Personal</option>
+                </select>
+            </td>
+            <td>
+                <span class="task-text">{{due_date}}</span>
+                <input type="date" class="form-control task-due-date task-input" value="{{due_date}}" style="display: none;">
+            </td>
+            <td>
+                <span class="task-text">{{description}}</span>
+                <input type="text" class="form-control task-description task-input" value="{{description}}" style="display: none;">
+            </td>
+            <td>
+                <span class="task-text">{{status}}</span>
+                <select class="form-select task-status task-input" style="display: none;">
+                    <option value="Pending" {{#ifPending}}selected{{/ifPending}}>Pending</option>
+                    <option value="Completed" {{#ifCompleted}}selected{{/ifCompleted}}>Completed</option>
+                    <option value="Overdue" {{#ifOverdue}}selected{{/ifOverdue}}>Overdue</option>
+                </select>
+            </td>
         </tr>
         {{/tasks}}
 
