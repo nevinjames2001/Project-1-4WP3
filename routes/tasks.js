@@ -65,4 +65,17 @@ router.put("/tasks/update", (req, res) => {
     });
 });
 
+// DELETE: Remove a task
+router.delete("/tasks/delete/:id", (req, res) => {
+    const taskId = req.params.id;
+
+    db.run("DELETE FROM tasks WHERE id = ?", [taskId], function (err) {
+        if (err) {
+            console.error("Error deleting task:", err);
+            return res.status(500).json({ error: "Error deleting task" });
+        }
+        res.json({ message: "Task deleted successfully" });
+    });
+});
+
 module.exports = router;

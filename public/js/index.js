@@ -50,6 +50,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
+        // Delete a Task
+    $("#taskTable tbody").on("click", ".delete-task-btn", function () {
+        let row = $(this).closest("tr");
+        let taskId = row.attr("data-task-id");
+
+        if (confirm("Are you sure you want to delete this task?")) {
+            fetch(`/tasks/delete/${taskId}`, { method: "DELETE" })
+            .then(response => response.json())
+            .then(() => {
+                table.row(row).remove().draw(); // Remove from DataTable
+                alert("Task Deleted!");
+            })
+            .catch(error => console.error("Error deleting task:", error));
+        }
+    });
+
     toggleEditBtn.addEventListener("click", function () {
         const taskRows = document.querySelectorAll("tr[data-task-id]");
 
