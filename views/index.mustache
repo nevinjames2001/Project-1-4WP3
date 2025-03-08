@@ -37,6 +37,69 @@
     </div>
 </nav>
 
+<div style="margin-right:10%;margin-left:10%;">
+     <h1>Task Manager</h1>
+
+    <div>
+        <table id="taskTable" class="table table-striped table-hover">
+        <thead class="table-dark">
+                <tr>
+                    <th>Task Name</th>
+                    <th>Category</th>
+                    <th>Due Date</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+        <tbody>
+
+        {{#tasks}}
+
+          <tr data-task-id="{{id}}" 
+            data-title="{{title}}" 
+            data-category="{{category}}" 
+            data-due_date="{{due_date}}" 
+            data-description="{{description}}" 
+            data-status="{{status}}" class="{{#isOverdue}}table-danger{{/isOverdue}}">
+            <td>
+                <span class="task-text">{{title}}</span>
+                <input type="text" class="form-control task-title task-input" value="{{title}}" style="display: none;" required>
+            </td>
+            <td>
+                <span class="task-text">{{category}}</span>
+                <select class="form-select task-category task-input" style="display: none;" required>
+                    <option value="Work" {{#ifWork}}selected{{/ifWork}}>Work</option>
+                    <option value="School" {{#ifSchool}}selected{{/ifSchool}}>School</option>
+                    <option value="Personal" {{#ifPersonal}}selected{{/ifPersonal}}>Personal</option>
+                </select>
+            </td>
+            <td>
+                <span class="task-text">{{due_date}}</span>
+                <input type="date" class="form-control task-due-date task-input" value="{{due_date}}" style="display: none;" required>
+            </td>
+            <td>
+                <span class="task-text">{{description}}</span>
+                <input type="text" class="form-control task-description task-input" value="{{description}}" style="display: none;" required>
+            </td>
+            <td>
+                <span class="task-text">{{status}}</span>
+                <select class="form-select task-status task-input" style="display: none;" required>
+                    <option value="Pending" {{#ifPending}}selected{{/ifPending}}>Pending</option>
+                    <option value="Completed" {{#ifCompleted}}selected{{/ifCompleted}}>Completed</option>
+                    <option value="Overdue" {{#ifOverdue}}selected{{/ifOverdue}}>Overdue</option>
+                </select>
+            </td>
+            <td>
+                <button class="btn btn-danger delete-task-btn">Delete</button>
+            </td>
+        </tr>
+        {{/tasks}}
+        </tbody>
+        </table>
+    </div>
+
 
 </body>
 
