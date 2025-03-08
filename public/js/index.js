@@ -66,6 +66,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+        // Delete All Tasks
+    document.getElementById("deleteAllTasksBtn").addEventListener("click", function () {
+        if (confirm("Are you sure you want to delete ALL tasks?")) {
+            fetch("/tasks/deleteAll", { method: "DELETE" })
+            .then(response => response.json())
+            .then(() => {
+                table.clear().draw(); // Clear DataTable
+                alert("All tasks deleted!");
+            })
+            .catch(error => console.error("Error deleting all tasks:", error));
+        }
+    });
+
     toggleEditBtn.addEventListener("click", function () {
         const taskRows = document.querySelectorAll("tr[data-task-id]");
 

@@ -78,4 +78,15 @@ router.delete("/tasks/delete/:id", (req, res) => {
     });
 });
 
+
+// DELETE: Remove all tasks
+router.delete("/tasks/deleteAll", (req, res) => {
+    db.run("DELETE FROM tasks", function (err) {
+        if (err) {
+            console.error("Error deleting all tasks:", err);
+            return res.status(500).json({ error: "Error deleting all tasks" });
+        }
+        res.json({ message: "All tasks deleted successfully" });
+    });
+});
 module.exports = router;
