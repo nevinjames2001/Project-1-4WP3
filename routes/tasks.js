@@ -39,4 +39,30 @@ router.post("/tasks/add", (req, res) => {
     );
 });
 
+
+router.put("/tasks/update", (req, res) => {
+    const { tasks } = req.body;
+
+    if (!tasks || tasks.length === 0) {
+        return res.status(400).json({ error: "No tasks provided for update." });
+    }
+    let updatedCount = 0;
+    tasks.forEach(task => {
+        db.run(
+            "UPDATE tasks SET title = ?, category = ?, due_date = ?, description = ?, status = ?, estimated_hours=? WHERE id = ?",
+            [task.title, task.category, task.due_date, task.description, task.status,task.estimated_hours, task.id],
+            function (err) {
+                if (err) {
+                    console.error("Error updating task:", err);
+                    return res.status(500).json({ error: "Error updating tasks." });
+                }
+                updatedCount++;
+                if (updatedCount === tasks.length) {
+                    res.json({ message: "Tasks updated successfully." });
+                }
+            }
+        );
+    });
+});
+
 module.exports = router;

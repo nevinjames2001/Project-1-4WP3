@@ -49,4 +49,64 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Error:", error));
     });
 
+
+    toggleEditBtn.addEventListener("click", function () {
+        const taskRows = document.querySelectorAll("tr[data-task-id]");
+
+        if (!isEditing) {
+            // Enable inputs
+            taskRows.forEach(row => {
+                row.querySelectorAll(".task-text").forEach(textContainer => textContainer.style.display = "none");
+                row.querySelectorAll(".task-input").forEach(inputContainer => inputContainer.style.display = "block");
+            });
+
+            toggleEditBtn.textContent = "Save Changes";
+        } else {
+            // Collect updated data
+            const updatedTasks = [];
+            taskRows.forEach(row => {
+                const taskId = row.getAttribute("data-task-id");
+
+                updatedTasks.push({
+                    id: taskId,
+                    title: row.querySelector(".task-title").value,
+                    category: row.querySelector(".task-category").value,
+                    due_date: row.querySelector(".task-due-date").value,
+                    description: row.querySelector(".task-description").value,
+                    status: row.querySelector(".task-status").value,
+                    estimated_hours: row.querySelector(".task-estimated_hours").value
+                });
+            });
+
+            // Send updated tasks to the backend API
+            fetch("http://localhost:3000/tasks/update", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ tasks: updatedTasks })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Tasks Updated:", data);
+                alert("Tasks updated successfully!");
+                window.location.reload(); // Refresh the page to show updated tasks
+            })
+            .catch(error => {
+                console.error("Error updating tasks:", error);
+                alert("Failed to update tasks.");
+            });
+
+            // Disable inputs after saving
+            taskRows.forEach(row => {
+                row.querySelectorAll(".task-text").forEach(textContainer => textContainer.style.display = "block");
+                row.querySelectorAll(".task-input").forEach(inputContainer => inputContainer.style.display = "none");
+            });
+
+            toggleEditBtn.textContent = "Update Task";
+        }
+
+        isEditing = !isEditing;
+    });
+
 });
