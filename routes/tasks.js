@@ -19,5 +19,24 @@ router.get("/", (req, res) => {
     });
 });
 
+// POST: Create new task
+router.post("/tasks/add", (req, res) => {
+    const { title, description, category, due_date, status,estimated_hours } = req.body;
+
+    if (!title || !category) {
+        return res.status(400).json({ error: "Task Name and Category are required" });
+    }
+
+    db.run(
+        "INSERT INTO tasks (title, description, category, due_date, status,estimated_hours) VALUES (?, ?, ?, ?, ?,?)",
+        [title, description, category, due_date, status,estimated_hours],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: "Error adding task" });
+            }
+            res.json({ message: "Task added successfully", taskId: this.lastID });
+        }
+    );
+});
 
 module.exports = router;
