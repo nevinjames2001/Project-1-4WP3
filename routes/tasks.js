@@ -2,17 +2,28 @@ const express = require("express");
 const db = require("../models/db");
 const router = express.Router();
 
+
 router.use(express.json());
 
 // GET all tasks
 router.get("/", (req, res) => {
     db.all("SELECT * FROM tasks", (err, rows) => {
         if (err) return res.status(500).send("Error retrieving tasks");
-        const today = new Date().toISOString().split("T")[0];
-        
-        rows.forEach(task => {
-            task.isOverdue=task.due_date < today;
-        })
+
+        const today = new Date();
+        const twoDaysLater = new Date();
+        twoDaysLater.setDate(today.getDate() + 2); // Add 2 day
+
+         rows = rows.map(task => {
+            const dueDate = new Date(task.due_date); // Convert due_date to Date object
+
+            return {
+                ...task,
+                isOverdue: dueDate < today,  // If the due date is before today, it's overdue
+                AlmostDue: dueDate >= today && dueDate <= twoDaysLater, // Due within 2 days
+                disabled: true
+            };
+        });
         rows = rows.map(task => ({ ...task, disabled: true }));
 
         res.render("index", { tasks: rows });
