@@ -45,7 +45,24 @@
         <button id="deleteAllTasksBtn" class="btn btn-danger ms-2">Delete All Tasks</button>
      </div>
      <div class="d-flex flex-wrap justify-content-end mt-2 mb-3 gap-2">
-        
+        <div>
+            <label for="categoryFilter" class="form-label">Filter by Category:</label>
+            <select id="categoryFilter" class="form-select">
+                <option value="all">All</option>
+                <option value="work">Work</option>
+                <option value="school">School</option>
+                <option value="Personal">Personal</option>
+            </select>
+        </div>
+        <div>
+            <label for="statusFilter" class="form-label">Filter by Status:</label>
+            <select id="statusFilter" class="form-select">
+                <option value="all">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+                <option value="Overdue">Overdue</option>
+            </select>
+        </div>
      </div>
     <div>
         <table id="taskTable" class="table table-striped table-hover">

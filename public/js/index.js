@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const toggleEditBtn = document.getElementById("openUpdateForm");
     let isEditing = false;
-    
+      const categoryFilter = document.getElementById("categoryFilter");
+    const statusFilter = document.getElementById("statusFilter");
+
     let table = $("#taskTable").DataTable({
         responsive: true,
         autoWidth: false,
@@ -138,4 +140,27 @@ document.addEventListener("DOMContentLoaded", function () {
         isEditing = !isEditing;
     });
 
+      function filterTasks() {
+        const selectedCategory = categoryFilter.value.toLowerCase();
+        const selectedStatus = statusFilter.value.toLowerCase();
+
+        document.querySelectorAll("tbody tr[data-task-id]").forEach(row => {
+            const taskCategory = row.getAttribute("data-category").toLowerCase();
+            const taskStatus = row.getAttribute("data-status").toLowerCase();
+
+            // Check if the row matches the selected filters
+            const matchesCategory = selectedCategory === "all" || taskCategory === selectedCategory;
+            const matchesStatus = selectedStatus === "all" || taskStatus === selectedStatus;
+
+            if (matchesCategory && matchesStatus) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+
+    // Attach event listeners to the filter dropdowns
+    categoryFilter.addEventListener("change", filterTasks);
+    statusFilter.addEventListener("change", filterTasks);
 });
