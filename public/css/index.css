@@ -1,0 +1,27 @@
+@media (max-width: 500px) {
+    .d-flex.flex-wrap.gap-2 {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    #taskTable th:nth-child(2),
+    /* Category */
+    #taskTable th:nth-child(3),
+    /* Due Date */
+    #taskTable th:nth-child(4),
+    /* Description */
+    #taskTable th:nth-child(5),
+    /* Status */
+    #taskTable th:nth-child(6),
+    #taskTable td:nth-child(2),
+    #taskTable td:nth-child(3),
+    #taskTable td:nth-child(4),
+    #taskTable td:nth-child(5),
+    #taskTable td:nth-child(6) {
+        display: none;
+    }
+}
