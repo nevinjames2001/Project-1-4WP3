@@ -2,6 +2,7 @@ const express = require("express");
 const mustacheExpress = require("mustache-express");
 const bodyParser = require("body-parser");
 const tasksRoutes = require("./routes/tasks");
+const homeRoutes = require("./routes/home");
 
 const app = express();
 const PORT = 3000;
@@ -17,5 +18,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use(express.json()); // Support JSON request bodies
 app.use("/", tasksRoutes);
+app.use("/home", homeRoutes);
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
